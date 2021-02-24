@@ -1,0 +1,20 @@
+h1 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    font-size: 45px;
+}
+
+.container {
+    background-color: thistle;
+    width: 80%;
+    margin: auto;
+}
+
+li {
+    list-style-type: none;
+}
+
+nav {
+    display: inline-block;
+    justify-items: space-between;
+}
