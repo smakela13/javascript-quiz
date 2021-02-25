@@ -10,11 +10,12 @@ h1 {
     margin: auto;
 }
 
-li {
+nav ul li {
     list-style-type: none;
+    display: inline-block;
 }
 
 nav {
-    display: inline-block;
-    justify-items: space-between;
+    background-color: bisque;
+    justify-content: flex-end;
 }
