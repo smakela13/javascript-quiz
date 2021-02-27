@@ -84,19 +84,15 @@ console.log("end");
 
 
 function init() {
-    clearDetails();
     reset();
 
     jsQuiz.addEventListener("click", function () {
-        startQuiz();
+        startQuiz(questions);
     });
 }
 
-function clearDetails() {
-    quizGameEl.innerHTML = "";
-}
-
 function reset() {
+    quizGameEl.innerHTML = "";
     currentScore = 0;
     gameDuration = 0;
     quizInterval;
@@ -105,26 +101,25 @@ function reset() {
 function startQuiz() {
     quizOver = false;
     timer = 80;
-    startButton.disabled = true;
     renderQuestion();
     startTimer();
 }
 
 function startTimer() {
-    var timerEl = 75;
+    var timerEl = 80;
     var timeInterval = setInterval(function () {
-        if (timerEl >= 0) {
-            timerEl--;
-            quizTimerEl.textContent = timerEl;
-        }
-            else if (currentScore === 20 && quizTimerEl > 0) {
-                clearInterval(timeInterval);
-                endQuiz();
-            }
-        else if (timerEl === 0) {
+    if (timerEl >= 0) {
+        timerEl--;
+        quizTimerEl.textContent = timerEl;
+    }
+    else if (currentScore === 20 && quizTimerEl > 0) {
+            clearInterval(timeInterval);
+            endQuiz();
+    }
+    else if (timerEl === 0) {
             clearInterval(timer);
             endQuiz();
-        }
+    }
     }, 1000);
 }
 function answerCorrect() {
@@ -144,14 +139,20 @@ function renderQuestion() {
     var questionEl = [];
     questionEl.textContent = currentQuestion;
     var questionN = document.createElement("h2");
-    theQuestion.append(questionN);
+    theQuestion.appendChild(questionN);
+    document.body.appendChild(theQuestion);
 
     for (let i = 0; i < choices.length; i++) {
         var choicesN = document.createElement("li");
-        choicesEl.text(choices[i]);
+        choicesN.setAttribute("id", "questionOrder" + i);
+        choicesEl.text = choices[i];
         theChoices.append(choicesN);
     }
     console.log(currentQuestion);
+    
+}
+
+function askedQuestions() {
     
 }
 renderQuestion();
