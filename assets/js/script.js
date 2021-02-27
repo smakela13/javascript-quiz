@@ -53,7 +53,23 @@ var questions = [
         choices: ["Yes, JavaScript is a stripped down version of Java", "Yes, JavaScript was built by the same person who developed Java", "No, the names were a coincidence", "No, JavaScript gained its name when Netscape and Sun signed a license agreement"],
         answer: "No, JavaScript gained its name when Netscape and Sun signed a license agreement"
     }
-]
+];
+
+var highScoreEl = document.querySelector("#highscore");
+var quizTimerEl = document.querySelector("#quizTimer");
+var quizGameEl = document.querySelector("#jsQuiz");
+var theQuestion = document.querySelector("#question");
+var theChoices = document.querySelector("#choices");
+var startButton = document.querySelector(".start-button");
+
+
+var currentQuestion = 0;
+var currentScore = 0;
+var gameDuration = 0;
+var quizOver = false;
+var timer;
+var timerCount;
+
 
 console.log(questions);
 
@@ -63,7 +79,90 @@ for (let i = 0; i < questions.length; i++) {
 
 console.log("end");
 
-init();
-startQuiz();
+
 renderQuestion();
-endQuiz();
+
+
+function init() {
+    clearDetails();
+    reset();
+
+    jsQuiz.addEventListener("click", function () {
+        startQuiz();
+    });
+}
+
+function clearDetails() {
+    quizGameEl.innerHTML = "";
+}
+
+function reset() {
+    currentScore = 0;
+    gameDuration = 0;
+}
+
+function startQuiz() {
+    quizOver = false;
+    timer = 80;
+    startButton.disabled = true;
+    renderQuestion();
+    startTimer();
+}
+
+function startTimer() {
+    timer = setInterval(function () {
+        timerCount--;
+        quizTimerEl.textContent = timerCount;
+        if (timerCount >= 0) {
+            if (isWin && timerCount > 0) {
+                clearInterval(timer);
+                winGame();
+            }
+        }
+        if (timerCount === 0) {
+            clearInterval(timer);
+            loseGame();
+        }
+    }, 1000);
+}
+function answerCorrect() {
+    // get answer from user and match if the answer is correct
+    var isCorrect;
+    if (isCorrect == questions[currentQuestion].answer) {
+        score++;
+    } else {
+        isCorrect = false;
+        gameDuration -= 10;
+    }
+    return;
+}
+
+function renderQuestion() {
+    var questionEl = document.createElement("h2");
+    questionEl.text = currentQuestion;
+    currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+    
+    theQuestion.append(currentQuestion);
+
+    for (let i = 0; i < choices.length; i++) {
+        const choicesEl = document.createElement("li");
+        choicesEl.text(choices[i]);
+        theChoices.append(choicesEl);
+    }
+    console.log(currentQuestion);
+}
+
+
+//currentQuestion.pop();
+
+/* main? for the score
+if (answerCorrect() === true) {
+    score++;
+} else {
+    gameDuration -= 10;
+} */
+
+//displayScore();
+//endQuiz();
+startButton.addEventListener("click", startQuiz);
+init();

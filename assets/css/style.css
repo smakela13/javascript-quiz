@@ -6,7 +6,7 @@ h1 {
 
 .container {
     background-color: thistle;
-    width: 80%;
+    width: 65%;
     margin: auto;
 }
 
@@ -22,4 +22,18 @@ p {
     text-align: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: bold;
+}
+
+.start-button {
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px;
+    margin: 15px;
+    border-radius: 5px;
+    background-color: thistle;
+    box-shadow: black 3px 3px 5px;
+}
+
+.start-button:hover {
+    
 }
