@@ -53,10 +53,11 @@ var questions = [
         choices: ["Yes, JavaScript is a stripped down version of Java", "Yes, JavaScript was built by the same person who developed Java", "No, the names were a coincidence", "No, JavaScript gained its name when Netscape and Sun signed a license agreement"],
         answer: "No, JavaScript gained its name when Netscape and Sun signed a license agreement"
     }
-];
+]
 
 var highScoreEl = document.querySelector("#highscore");
 var quizTimerEl = document.querySelector("#quizTimer");
+var timerEl = document.querySelector("#timer-count");
 var quizGameEl = document.querySelector("#jsQuiz");
 var theQuestion = document.querySelector("#question");
 var theChoices = document.querySelector("#choices");
@@ -66,7 +67,9 @@ var startButton = document.querySelector(".start-button");
 var currentQuestion = 0;
 var currentScore = 0;
 var gameDuration = 0;
+var gameElapsed = 0;
 var quizOver = false;
+var quizInterval;
 var timer;
 var timerCount;
 
@@ -78,9 +81,6 @@ for (let i = 0; i < questions.length; i++) {
 }
 
 console.log("end");
-
-
-renderQuestion();
 
 
 function init() {
@@ -99,6 +99,7 @@ function clearDetails() {
 function reset() {
     currentScore = 0;
     gameDuration = 0;
+    quizInterval;
 }
 
 function startQuiz() {
@@ -110,18 +111,19 @@ function startQuiz() {
 }
 
 function startTimer() {
-    timer = setInterval(function () {
-        timerCount--;
-        quizTimerEl.textContent = timerCount;
-        if (timerCount >= 0) {
-            if (isWin && timerCount > 0) {
-                clearInterval(timer);
-                winGame();
-            }
+    var timerEl = 75;
+    var timeInterval = setInterval(function () {
+        if (timerEl >= 0) {
+            timerEl--;
+            quizTimerEl.textContent = timerEl;
         }
-        if (timerCount === 0) {
+            else if (currentScore === 20 && quizTimerEl > 0) {
+                clearInterval(timeInterval);
+                endQuiz();
+            }
+        else if (timerEl === 0) {
             clearInterval(timer);
-            loseGame();
+            endQuiz();
         }
     }, 1000);
 }
@@ -138,20 +140,21 @@ function answerCorrect() {
 }
 
 function renderQuestion() {
-    var questionEl = document.createElement("h2");
-    questionEl.text = currentQuestion;
     currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-    
-    theQuestion.append(currentQuestion);
+    var questionEl = [];
+    questionEl.textContent = currentQuestion;
+    var questionN = document.createElement("h2");
+    theQuestion.append(questionN);
 
     for (let i = 0; i < choices.length; i++) {
-        const choicesEl = document.createElement("li");
+        var choicesN = document.createElement("li");
         choicesEl.text(choices[i]);
-        theChoices.append(choicesEl);
+        theChoices.append(choicesN);
     }
     console.log(currentQuestion);
+    
 }
-
+renderQuestion();
 
 //currentQuestion.pop();
 
@@ -163,6 +166,9 @@ if (answerCorrect() === true) {
 } */
 
 //displayScore();
-//endQuiz();
+function endQuiz() {
+    reset()
+}
+
 startButton.addEventListener("click", startQuiz);
 init();
