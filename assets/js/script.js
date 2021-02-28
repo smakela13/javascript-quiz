@@ -35,6 +35,7 @@ var quizGameEl = document.querySelector("#jsQuiz"); // currently unused
 var theQuestion = document.querySelector("#question");
 var theChoices = document.querySelector("#choices");
 var startButton = document.querySelector(".start-button");
+var submitButton = document.querySelector("#submit-button")
 
 
 var questions = 0;
@@ -46,7 +47,10 @@ var quizOver = false;
 var quizInterval;
 var timer;
 var timerCount;
+var timerRun;
 var indexQA = 0;
+var cleaningList = [];
+
 
 function init() {
     reset();
@@ -61,6 +65,13 @@ function reset() {
     currentScore = 0;
     gameDuration = 0;
     quizInterval;
+    timerRun = false;
+}
+
+function cleanList() {
+    for (let i = 0; i < cleaningList.length; i++) {
+        cleaningList[i].remove();
+    }
 }
 
 function startQuiz() {
@@ -97,25 +108,24 @@ function startQuiz() {
     currentScore = 0;
     startButton.disabled = true;
     startButton.style.display = "none";
+    cleanList();
     renderQuestion();
+    timerRun = true;
     startTimer();
 }
 
 function startTimer() {
-    var timerEl = 80;
-    var timeInterval = setInterval(function () {
-    if (timerEl >= 0) {
-        timerEl--;
-        quizTimerEl.textContent = timerEl;
+    gameDuration = 80;
+    var timerN = setInterval(function () {
+    if (gameDuration >= 0 && timerRun) {
+        gameDuration--;
+        quizTimerEl.textContent = gameDuration;
     }
-    else if (currentScore === 20 && quizTimerEl > 0) {
-            clearInterval(timeInterval);
-            endQuiz();
-    }
-    else if (timerEl === 0) {
-            clearInterval(timer);
-            endQuiz();
-    }
+    else if (gameDuration <= 0) {
+        clearInterval(timerN);
+        cleanList();
+        endQuiz();
+    } 
     }, 1000);
 }
 
@@ -140,6 +150,7 @@ function renderQuestion() {
     var questionN = document.createElement("h2");
     questionN.textContent = currentQuestion.question;    
     theQuestion.appendChild(questionN);
+    cleaningList.push(questionN);
 
     // Made and appended the choices - for loop due to choices being in array
     for (let i = 0; i < currentQuestion.choices.length; i++) {
@@ -148,16 +159,31 @@ function renderQuestion() {
         choicesN.textContent = currentQuestion.choices[i];
         choicesN.addEventListener("click", choiceTaken);
         theChoices.appendChild(choicesN);
+        cleaningList.push(choicesN);
     }    
-    delete questions[indexQA];
+    questions = arrayRemoveQuestion(questions, currentQuestion);
+}
+
+function arrayRemoveQuestion(array, child) {
+    return array.filter(function (elements) {
+        return elements != child;
+    });
 }
 
 function choiceTaken(elementFrom) {
     var test = elementFrom.target;
-    answerCorrect(test.textContent);
+    if (gameDuration <= 0) {
+        endQuiz();
+    } else {
+        answerCorrect(test.textContent);
 
-    askedQuestions();
-    renderQuestion();
+        askedQuestions();
+        if (questions.length > 0) {
+            renderQuestion();
+        } else {
+            endQuiz();
+        }
+    }
 }
 
 function askedQuestions() {
@@ -166,8 +192,9 @@ function askedQuestions() {
     Next remove elements that are already put
     to page to make room for next questions
     */
-    theQuestion.remove();
-    theChoices.remove();
+    //currentQuestion.remove();
+    cleanList();
+    
 }
 
 //currentQuestion.pop();
@@ -181,9 +208,46 @@ if (answerCorrect() === true) {
 
 //displayScore();
 
-function endQuiz() {
-    reset();
+function viewResults() {
+    
 }
+
+function saveScore() {
+    console.log("save score here");
+}
+
+function endQuiz() {
+    console.log("EndGame");
+
+    quizTimerEl.textContent = "Quiz complete!";
+    if (gameDuration < 0) {
+        gameDuration = 0;
+    }
+    var endScore = gameDuration * currentScore + currentScore;
+    var quizEnd = document.createElement("h3");
+    quizEnd.setAttribute("id", "the-end");
+    quizEnd.textContent = "The quiz has ended! Here is how many answers you got correct: " + currentScore + " and your time left is: " + gameDuration + " giving you a score of " + endScore + ". Hope you had fun!";
+    quizGameEl.appendChild(quizEnd);
+
+    var enterInitials = document.createElement("input");
+    enterInitials.setAttribute("type", "text");
+    enterInitials.setAttribute("id", "initials");
+    enterInitials.setAttribute("placeholder", "Enter your initials");
+    theQuestion.appendChild(enterInitials);
+
+    var submit = document.createElement("button");
+    submit.setAttribute("type", "button");
+    submit.setAttribute("id", "submit-button");
+    submit.setAttribute("placeholder", "Submit");
+    theChoices.appendChild(submit);
+
+    timerRun = false;
+
+    submitButton.addEventListener("click", saveScore);
+    //reset();
+    //cleanList();
+}
+
 
 startButton.addEventListener("click", startQuiz);
 init();
