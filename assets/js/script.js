@@ -1,37 +1,6 @@
-/* GIVEN I am taking a code quiz
-WHEN I click the start button 
-        - make a start button
-        - page ids for question, answer, and result
-
-THEN a timer starts and I am presented with a question
-        - make a timer for entire quiz
-        - randomize the questions
-        - render the questions
-        - render the choices
-        - check if correct answer
-        - give feedback
-        - keep track of current score
-        - provide score
-        - provide space to write initials
-        - save initials and score in localstorage
-        - clear high score
-
-WHEN I answer a question
-THEN I am presented with another question
-WHEN I answer a question incorrectly
-THEN time is subtracted from the clock
-        - function for incorrect answer that subtracts time
-
-WHEN all questions are answered or the timer reaches 0
-THEN the game is over
-WHEN the game is over
-THEN I can save my initials and my score */
-
-
 var highScoreEl = document.querySelector("#highscore");
 var quizTimerEl = document.querySelector("#quizTimer");
-var timerEl = document.querySelector("#timer-count");
-var quizGameEl = document.querySelector("#jsQuiz"); // currently unused
+var quizGameEl = document.querySelector("#jsQuiz");
 var theQuestion = document.querySelector("#question");
 var theChoices = document.querySelector("#choices");
 var startButton = document.querySelector(".start-button");
@@ -43,32 +12,27 @@ var currentQuestion = 0;
 var currentScore = 0;
 var endScore = 0;
 var gameDuration = 0;
-var gameElapsed = 0;
 var quizOver = false;
-var quizInterval;
 var timer = 80;
 var timerN;
-var timerCount;
 var timerRun;
 var indexQA = 0;
 var cleaningList = [];
 var clearTimer = false;
+var isCorrect;
+var answered = false;
 
 
 function init() {
     reset();
-
-    jsQuiz.addEventListener("click", function () {
-        startQuiz(questions);
-    });
 }
 
 function reset() {
     quizGameEl.innerHTML = "";
     currentScore = 0;
     gameDuration = 0;
-    quizInterval;
     timerRun = false;
+    answered = false;
 }
 
 function cleanList() {
@@ -78,6 +42,7 @@ function cleanList() {
 }
 
 function startQuiz() {
+    reset();
     questions = [
         {
             question: "What company developed Javascript?",
@@ -114,6 +79,7 @@ function startQuiz() {
     renderQuestion();
     timerRun = true;
     clearTimer = false;
+    isCorrect = false;
     gameDuration = timer;
     startTimer();
 }
@@ -139,11 +105,11 @@ function startTimer() {
 
 // Gets answer from user and matches if the answer is correct
 function answerCorrect(answerGiven) {
-    var isCorrect;
+    isCorrect;
+    answered = true;
     if (answerGiven === currentQuestion.answer) {
         currentScore++;
         isCorrect = true;
-        console.log("CORRECT");
     } else {
         isCorrect = false;
         gameDuration -= 10;
@@ -170,6 +136,35 @@ function renderQuestion() {
         cleaningList.push(choicesN);
     }    
     questions = arrayRemoveQuestion(questions, currentQuestion);
+    console.log("testset");
+    console.log(isCorrect);
+    console.log(answered);
+    if (isCorrect && answered) {
+        // correct
+        var line = document.createElement("hr");
+        line.setAttribute("id", "line");
+        theChoices.appendChild(line);
+        cleaningList.push(line);
+
+        var correct = document.createElement("p");
+        correct.setAttribute("id", "correct");
+        correct.textContent = "Correct!";
+        theChoices.appendChild(correct);
+        cleaningList.push(correct);
+
+    } else if (!isCorrect && answered) {
+        // wrong
+        var line = document.createElement("hr");
+        line.setAttribute("id", "line");
+        theChoices.appendChild(line);
+        cleaningList.push(line);
+
+        var wrong = document.createElement("p");
+        wrong.setAttribute("id", "choice");
+        wrong.textContent = "Wrong!";
+        theChoices.appendChild(wrong);
+        cleaningList.push(wrong);
+    }
 }
 
 function arrayRemoveQuestion(array, child) {
@@ -195,26 +190,8 @@ function choiceTaken(elementFrom) {
 }
 
 function askedQuestions() {
-    console.log(indexQA);
-    /*
-    Next remove elements that are already put
-    to page to make room for next questions
-    */
-    //currentQuestion.remove();
     cleanList();
-    
 }
-
-//currentQuestion.pop();
-
-/* main? for the score
-if (answerCorrect() === true) {
-    score++;
-} else {
-    gameDuration -= 10;
-} */
-
-//displayScore();
 
 function getResults() {
     var storedScores = JSON.parse(localStorage.getItem("leaderboard"));
@@ -329,10 +306,10 @@ function endQuiz() {
     playAgain.addEventListener("click", startQuiz);
 
     timerRun = false;
+    answered = false;
 
     submit.addEventListener("click", saveScore);
     cleaningList.push(submit, enterInitials, quizEnd, playAgain);
-
 }
 
 highScoreEl.addEventListener("click", viewLeaderboard);
