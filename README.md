@@ -1,4 +1,4 @@
-# Sarah Makela's Portfolio
+JavaScript Quiz
 
 ## Table of Contents
 
