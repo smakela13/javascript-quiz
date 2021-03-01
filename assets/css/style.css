@@ -61,7 +61,7 @@ nav ul {
 
 nav ul li {
     list-style-type: none;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 #highscore {
@@ -86,13 +86,13 @@ nav ul li {
 /* Quiz intro */
 .container {
     background-color: var(--salmonpink);
-    padding: 20px;
+    padding: 5px;
     height: 65vh;
 }
 
 .start-button {
     font-weight: bold;
-    font-size: 25px;
+    font-size: 20px;
     padding: 5px;
     margin: 15px;
     border-radius: 3px;
@@ -202,7 +202,7 @@ input:focus {
 
 /* Smaller screens */
 @media screen and (max-width: 992px) {
-  .container {
-      max-width: 95%;
+  body {
+      width: 90%;
   }
 }
