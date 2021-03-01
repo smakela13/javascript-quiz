@@ -149,7 +149,7 @@ function renderQuestion() {
         cleaningList.push(lineW);
 
         var wrong = document.createElement("p");
-        wrong.setAttribute("id", "choice");
+        wrong.setAttribute("id", "wrong");
         wrong.textContent = "Wrong!";
         theChoices.appendChild(wrong);
         cleaningList.push(wrong);
@@ -212,6 +212,7 @@ function viewLeaderboard() {
     var storedResults = getResults();
     if (storedResults !== null) {
         var leaderboardHead = document.createElement("p");
+        leaderboardHead.setAttribute("id", "leader-head");
         leaderboardHead.textContent = "Welcome to the leaderboard!";
         theQuestion.appendChild(leaderboardHead);
         cleaningList.push(leaderboardHead);

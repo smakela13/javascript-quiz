@@ -37,3 +37,56 @@ p {
 .start-button:hover {
     
 }
+
+
+var highScoreEl = document.querySelector("#highscore");
+var quizTimerEl = document.querySelector("#quizTimer");
+var quizGameEl = document.querySelector("#jsQuiz");
+var theQuestion = document.querySelector("#question");
+var theChoices = document.querySelector("#choices");
+var startButton = document.querySelector(".start-button");
+
+var questionN = document.createElement("h2");
+var choicesN = document.createElement("li");
+var lineC = document.createElement("hr");
+lineC.setAttribute("id", "line");
+
+var correct = document.createElement("p");
+        correct.setAttribute("id", "correct");
+
+        var wrong = document.createElement("p");
+        wrong.setAttribute("id", "wrong");
+
+        var leaderboardHead = document.createElement("p");
+        leaderboardHead.setAttribute("id", "leader-head");
+
+        var entryN = document.createElement("li");
+            entryN.setAttribute("id", "name" + i);
+
+            var viewResults = document.createElement("h3");
+        viewResults.setAttribute("id", "view-results");
+
+        var clearBoardBtn = document.createElement("button");
+    clearBoardBtn.setAttribute("type", "button");
+    clearBoardBtn.setAttribute("id", "clear-button");
+
+    var playAgain = document.createElement("button");
+    playAgain.setAttribute("type", "button");
+    playAgain.setAttribute("id", "again-button");
+
+    var quizEnd = document.createElement("h3");
+    quizEnd.setAttribute("id", "the-end");
+
+    var enterInitials = document.createElement("input");
+    enterInitials.setAttribute("type", "text");
+    enterInitials.setAttribute("id", "initials");
+
+
+submit = document.createElement("button");
+    submit.setAttribute("type", "button");
+    submit.setAttribute("id", "submit-button");
+
+
+    var playAgain = document.createElement("button");
+    playAgain.setAttribute("type", "button");
+    playAgain.setAttribute("id", "again-button");
