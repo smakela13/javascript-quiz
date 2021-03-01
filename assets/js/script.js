@@ -35,21 +35,24 @@ var quizGameEl = document.querySelector("#jsQuiz"); // currently unused
 var theQuestion = document.querySelector("#question");
 var theChoices = document.querySelector("#choices");
 var startButton = document.querySelector(".start-button");
-var submitButton = document.querySelector("#submit-button")
 
 
+var submit;
 var questions = 0;
 var currentQuestion = 0;
 var currentScore = 0;
+var endScore = 0;
 var gameDuration = 0;
 var gameElapsed = 0;
 var quizOver = false;
 var quizInterval;
-var timer;
+var timer = 80;
+var timerN;
 var timerCount;
 var timerRun;
 var indexQA = 0;
 var cleaningList = [];
+var clearTimer = false;
 
 
 function init() {
@@ -104,28 +107,33 @@ function startQuiz() {
     ];
 
     quizOver = false;
-    timer = 80;
     currentScore = 0;
     startButton.disabled = true;
     startButton.style.display = "none";
     cleanList();
     renderQuestion();
     timerRun = true;
+    clearTimer = false;
+    gameDuration = timer;
     startTimer();
 }
 
 function startTimer() {
-    gameDuration = 80;
-    var timerN = setInterval(function () {
-    if (gameDuration >= 0 && timerRun) {
+    timerN = setInterval(function () {
+    if (gameDuration >= 0 && timerRun && !clearTimer) {
         gameDuration--;
         quizTimerEl.textContent = gameDuration;
     }
-    else if (gameDuration <= 0) {
+    else if (gameDuration <= 0 && timerRun && !clearTimer) {
         clearInterval(timerN);
         cleanList();
         endQuiz();
     } 
+    if (clearTimer) {
+        gameDuration = 0;
+        timerRun = false;
+        clearInterval(timerN);
+    }
     }, 1000);
 }
 
@@ -208,12 +216,84 @@ if (answerCorrect() === true) {
 
 //displayScore();
 
-function viewResults() {
+function getResults() {
+    var storedScores = JSON.parse(localStorage.getItem("leaderboard"));
+    return storedScores;
+}
+
+function clearResults() {
+    localStorage.setItem("leaderboard", null);
+    viewLeaderboard();
+}
+
+function viewLeaderboard() {
+    cleanList();
+    clearTimer = true;
+    quizTimerEl.textContent = "";
+
+    var storedResults = getResults();
+    if (storedResults !== null) {
+        // add leaderboard header to jsQuiz ID
+        var leaderboardHead = document.createElement("p");
+        leaderboardHead.textContent = "Welcome to the leaderboard!";
+        theQuestion.appendChild(leaderboardHead);
+        cleaningList.push(leaderboardHead);
+
+        // added leaderboard to questions ID
+        for (let i = 0; i < storedResults.length; i++) {
+            var entryN = document.createElement("li");
+            entryN.setAttribute("id", "name" + i);
+            entryN.textContent = storedResults[i].name + " has score of " + storedResults[i].score + ".";
+            theQuestion.appendChild(entryN);
+            cleaningList.push(entryN);
+        }
+    } else {
+        // let user know no scores exist and ask them to play the game
+        var viewResults = document.createElement("h3");
+        viewResults.setAttribute("id", "view-results");
+        viewResults.textContent = "No scores currently exist! Please take the quiz.";
+        theQuestion.appendChild(viewResults);
+        cleaningList.push(viewResults);
+    }
     
+    // need a clear high scores and play again button
+    var clearBoardBtn = document.createElement("button");
+    clearBoardBtn.setAttribute("type", "button");
+    clearBoardBtn.setAttribute("id", "clear-button");
+    clearBoardBtn.innerHTML = "Clear High Scores";
+    theChoices.appendChild(clearBoardBtn);
+    clearBoardBtn.addEventListener("click", clearResults);
+
+    var playAgain = document.createElement("button");
+    playAgain.setAttribute("type", "button");
+    playAgain.setAttribute("id", "again-button");
+    playAgain.innerHTML = "Play Again";
+    theChoices.appendChild(playAgain);
+    playAgain.addEventListener("click", startQuiz);
+
+    cleaningList.push(clearBoardBtn, playAgain);
 }
 
 function saveScore() {
     console.log("save score here");
+
+    var initials = document.querySelector("#initials").value;
+    var storedResults = getResults();
+    var leaderboardItem = {
+        "name": initials,
+        "score": endScore,
+    };
+    if (storedResults !== null) {
+        storedResults.push(leaderboardItem);
+    } else {
+        storedResults = [leaderboardItem];
+    }
+    
+    // in case of emergency - localStorage.setItem(initials, endScore);
+    localStorage.setItem("leaderboard", JSON.stringify(storedResults));
+
+    submit.style.display = "none";
+    viewLeaderboard();
 }
 
 function endQuiz() {
@@ -223,7 +303,7 @@ function endQuiz() {
     if (gameDuration < 0) {
         gameDuration = 0;
     }
-    var endScore = gameDuration * currentScore + currentScore;
+    endScore = gameDuration * currentScore + currentScore;
     var quizEnd = document.createElement("h3");
     quizEnd.setAttribute("id", "the-end");
     quizEnd.textContent = "The quiz has ended! Here is how many answers you got correct: " + currentScore + " and your time left is: " + gameDuration + " giving you a score of " + endScore + ". Hope you had fun!";
@@ -235,19 +315,19 @@ function endQuiz() {
     enterInitials.setAttribute("placeholder", "Enter your initials");
     theQuestion.appendChild(enterInitials);
 
-    var submit = document.createElement("button");
+    submit = document.createElement("button");
     submit.setAttribute("type", "button");
     submit.setAttribute("id", "submit-button");
-    submit.setAttribute("placeholder", "Submit");
-    theChoices.appendChild(submit);
+    submit.innerHTML = "Submit";
+    theQuestion.appendChild(submit);
 
     timerRun = false;
 
-    submitButton.addEventListener("click", saveScore);
-    //reset();
-    //cleanList();
+    submit.addEventListener("click", saveScore);
+    cleaningList.push(submit, enterInitials, quizEnd);
+
 }
 
-
+highScoreEl.addEventListener("click", viewLeaderboard);
 startButton.addEventListener("click", startQuiz);
 init();
