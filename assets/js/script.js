@@ -5,6 +5,7 @@ var quizGameEl = document.querySelector("#jsQuiz");
 var theQuestion = document.querySelector("#question");
 var theChoices = document.querySelector("#choices");
 var startButton = document.querySelector(".start-button");
+var introduction = document.querySelector("#intro");
 
 // global variables for quiz
 var submit;
@@ -78,6 +79,7 @@ function startQuiz() {
     currentScore = 0;
     startButton.disabled = true;
     startButton.style.display = "none";
+    introduction.style.display = "none";
     cleanList();
     renderQuestion();
     timerRun = true;
@@ -121,7 +123,7 @@ function renderQuestion() {
     // appended the choices, for loop due to choices being in array
     for (let i = 0; i < currentQuestion.choices.length; i++) {
         var choicesN = document.createElement("li");
-        choicesN.setAttribute("id", "choice" + i);
+        choicesN.setAttribute("id", "choice");
         choicesN.textContent = currentQuestion.choices[i];
         choicesN.addEventListener("click", choiceTaken);
         theChoices.appendChild(choicesN);
@@ -187,18 +189,13 @@ function choiceTaken(elementFrom) {
         endQuiz();
     } else {
         answerCorrect(clickN.textContent); 
-        askedQuestions();
+        cleanList();
         if (questions.length > 0) {
             renderQuestion();
         } else {
             endQuiz();
         }
     }
-}
-
-// clears asked questions from page after user answers
-function askedQuestions() {
-    cleanList();
 }
 
 /* allows the user to view leaderboard and see current scores
@@ -208,10 +205,11 @@ function viewLeaderboard() {
     clearTimer = true;
     quizTimerEl.textContent = "";
     startButton.style.display = "none";
+    introduction.style.display = "none";
 
     var storedResults = getResults();
     if (storedResults !== null) {
-        var leaderboardHead = document.createElement("p");
+        var leaderboardHead = document.createElement("h2");
         leaderboardHead.setAttribute("id", "leader-head");
         leaderboardHead.textContent = "Welcome to the leaderboard!";
         theQuestion.appendChild(leaderboardHead);
@@ -219,15 +217,15 @@ function viewLeaderboard() {
 
         for (let i = 0; i < storedResults.length; i++) {
             var entryN = document.createElement("li");
-            entryN.setAttribute("id", "name" + i);
-            entryN.textContent = storedResults[i].name + " has score of " + storedResults[i].score + ".";
+            entryN.setAttribute("id", "lead-scores");
+            entryN.textContent = storedResults[i].name + "'s score is " + storedResults[i].score + ".";
             theQuestion.appendChild(entryN);
             cleaningList.push(entryN);
         }
     }
     // lets user know no scores exist and asks them to play the game
     else {
-        var viewResults = document.createElement("h3");
+        var viewResults = document.createElement("h2");
         viewResults.setAttribute("id", "view-results");
         viewResults.textContent = "No scores currently exist! Please take the quiz.";
         theQuestion.appendChild(viewResults);
@@ -285,16 +283,14 @@ function clearResults() {
 * to put in their initials and if they want to play again
 * without entering their initials */
 function endQuiz() {
-    console.log("EndGame");
-
     quizTimerEl.textContent = "Quiz complete!";
     if (gameDuration < 0) {
         gameDuration = 0;
     }
     endScore = gameDuration * currentScore + currentScore;
-    var quizEnd = document.createElement("h3");
+    var quizEnd = document.createElement("p");
     quizEnd.setAttribute("id", "the-end");
-    quizEnd.textContent = "The quiz has ended! Here is how many answers you got correct: " + currentScore + " and your time left is: " + gameDuration + " giving you a score of " + endScore + ". Hope you had fun!";
+    quizEnd.innerHTML = "The quiz has ended. <br /> You answered " + currentScore + " questions correctly with " + gameDuration + " seconds left. Your score is " + endScore + ". <br /> Hope you had fun!";
     quizGameEl.appendChild(quizEnd);
 
     var enterInitials = document.createElement("input");
@@ -313,7 +309,7 @@ function endQuiz() {
     playAgain.setAttribute("type", "button");
     playAgain.setAttribute("id", "again-button");
     playAgain.innerHTML = "Play Again";
-    theQuestion.appendChild(playAgain);
+    theChoices.appendChild(playAgain);
     playAgain.addEventListener("click", startQuiz);
 
     timerRun = false;

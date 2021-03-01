@@ -5,33 +5,51 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
     <title>JavaScript Quiz</title>
 </head>
 <body>
-    <div class="container">
+    <!-- Nav for high scores and timer countdown -->
     <header>
         <nav>
         <ul>
-            <li id="highscore"> <input type="button" value="View High Scores"></input></li>
+            <li id="highscore">View High Scores</li>
+        </ul>
+        <ul>
             <li id="timer-count">Time: <span id="quizTimer"></span></li>
         </ul>
     </nav>
     </header>
+    <!-- Pink stripe -->
+    <div class="pink"></div>
+    <!-- Container for quiz -->
+    <div class="container">
     <main>
-       <h1>JavaScript Quiz</h1>
-       <p>
+        <!-- Quiz intro -->
+        <h1>JavaScript Quiz</h1>
+        <p id="intro">
            Ready to prove your knowledge on JavaScript? Answer these questions to see how you stack up! Each wrong answer will cause you to lose ten seconds on the clock. Be sure to enter your initials at the end of the quiz.
-       </p>
-       <p>
+        </p>
+        <!-- Start button -->
+        <p>
             <button class="start-button">Start Quiz</button>
-       </p>
-            <section>
+        </p>
+        <!-- Dynamically generated quiz -->
+        <section>
             <div id="jsQuiz"></div>
-            <div id="question"></div>
-            <div id="choices"></div>
-            </section>
+            <div style="text-align:center;" id="question"></div>
+            <div style="text-align:center;" id="choices"></div>
+        </section>
     </main>
     </div>
+    <!-- Purple stripe -->
+    <div class="purple"></div>
+    <!-- Footer -->
+    <footer>
+        <h4>Made with ❤️️ by Sarah Makela</h4>
+        <h4>&copy; 2021 Sarah Makela</h4>
+    </footer>
     <script src="./assets/js/script.js"></script>
 </body>
 </html>

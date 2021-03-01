@@ -1,92 +1,208 @@
-h1 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    text-align: center;
-    font-size: 45px;
+/* Page styles */
+:root {
+    --darkblue: #355C7D;
+    --softpurple: #6C5B7B;
+    --salmonpink: #C06C84;
+    --brinkpink: #F67280;
+    --peach: #F8B195;
 }
 
-.container {
-    background-color: thistle;
+body {
+    background-color: var(--darkblue);
     width: 65%;
     margin: auto;
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    
 }
 
-nav ul li {
-    list-style-type: none;
+h1 {
+    font-family: 'Rubik', Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    font-size: 75px;
+    text-shadow: whitesmoke 1px 1px 1px;
 }
 
-nav {
-    background-color: bisque;
+h2 {
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    font-size: 38px;
+}
+
+h4 {
+    text-align: center;
+    color: var(--salmonpink);
+    line-height: 8px;
+    font-size: 20px;
+    text-shadow: black 1px 1px 1px;
 }
 
 p {
     text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 30px;
     font-weight: bold;
+    padding: 0 10%;
+    line-height: 32px;
+}
+
+/* nav */
+nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--peach);
+    margin-top: 3%;
+    padding: 5px;
+}
+
+nav ul {
+    display: inline-block;
+    padding: 0 5%;
+}
+
+nav ul li {
+    list-style-type: none;
+    font-size: 20px;
+}
+
+#highscore {
+    border: none;
+    cursor: pointer;
+    background: none;
+    font-weight: bold;
+}
+
+#highscore:hover {
+    border: none;
+    cursor: pointer;
+    background: none;
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--darkblue);
+}
+
+#timer-count {
+    font-weight: bold;
+}
+
+/* Quiz intro */
+.container {
+    background-color: var(--salmonpink);
+    padding: 20px;
+    height: 65vh;
 }
 
 .start-button {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 25px;
     padding: 5px;
     margin: 15px;
-    border-radius: 5px;
-    background-color: thistle;
-    box-shadow: black 3px 3px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--darkblue);
+    background-color: #d7a2b1;
+    box-shadow: var(--softpurple) 2px 2px 4px;
+    cursor: pointer;
 }
 
 .start-button:hover {
-    
+    box-shadow: var(--darkblue) 0 0 5px;
 }
 
+.purple {
+    background-color: var(--softpurple);
+    padding: 20px;
+}
 
-var highScoreEl = document.querySelector("#highscore");
-var quizTimerEl = document.querySelector("#quizTimer");
-var quizGameEl = document.querySelector("#jsQuiz");
-var theQuestion = document.querySelector("#question");
-var theChoices = document.querySelector("#choices");
-var startButton = document.querySelector(".start-button");
+.pink {
+    background-color: var(--brinkpink);
+    padding: 20px;
+}
 
-var questionN = document.createElement("h2");
-var choicesN = document.createElement("li");
-var lineC = document.createElement("hr");
-lineC.setAttribute("id", "line");
+/* Quiz in progress */
+#choice {
+    list-style-type: none;
+    text-align: center;
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 40px;
+}
 
-var correct = document.createElement("p");
-        correct.setAttribute("id", "correct");
+#choice:hover {
+    text-shadow: 0 0 5px var(--darkblue);
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        var wrong = document.createElement("p");
-        wrong.setAttribute("id", "wrong");
+hr {
+    border: solid 2px var(--darkblue);
+    border-radius: 5px;
+}
 
-        var leaderboardHead = document.createElement("p");
-        leaderboardHead.setAttribute("id", "leader-head");
+/* End of quiz */
+input {
+    appearance: none;
+    margin: 2px;
+    box-shadow: inset 1px 1px 5px var(--salmonpink);
+    caret-color: var(--darkblue);
+    font-size: 20px;
+    border-radius: 3px;
+    border: 1px solid var(--darkblue);
+}
 
-        var entryN = document.createElement("li");
-            entryN.setAttribute("id", "name" + i);
+input:focus {
+    outline: none;
+}
 
-            var viewResults = document.createElement("h3");
-        viewResults.setAttribute("id", "view-results");
+#submit-button {
+    padding: 1.5px 15px 1px 15px;
+    border: 1px solid var(--darkblue);
+    background-color: #d7a2b1;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 20px;
+}
 
-        var clearBoardBtn = document.createElement("button");
-    clearBoardBtn.setAttribute("type", "button");
-    clearBoardBtn.setAttribute("id", "clear-button");
+#again-button {
+    margin: 25px;
+    padding: 3px 5px;
+    border: 1.5px solid var(--darkblue);
+    background-color: #d7a2b1;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 20px;
+}
 
-    var playAgain = document.createElement("button");
-    playAgain.setAttribute("type", "button");
-    playAgain.setAttribute("id", "again-button");
+#submit-button:hover,
+#again-button:hover {
+    box-shadow: var(--darkblue) 0 0 5px;
+}
 
-    var quizEnd = document.createElement("h3");
-    quizEnd.setAttribute("id", "the-end");
+/* Leaderboard */
+#lead-scores {
+    list-style-type: none;
+    text-align: center;
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 25px;
+    line-height: 40px;
+}
 
-    var enterInitials = document.createElement("input");
-    enterInitials.setAttribute("type", "text");
-    enterInitials.setAttribute("id", "initials");
+#clear-button {
+    display: block;
+    margin: 15px auto;
+    padding: 3px 5px;
+    border: 1.5px solid var(--darkblue);
+    background-color: #d7a2b1;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 20px;
+}
 
+#clear-button:hover {
+    box-shadow: var(--darkblue) 0 0 5px;
+}
 
-submit = document.createElement("button");
-    submit.setAttribute("type", "button");
-    submit.setAttribute("id", "submit-button");
-
-
-    var playAgain = document.createElement("button");
-    playAgain.setAttribute("type", "button");
-    playAgain.setAttribute("id", "again-button");
+/* Smaller screens */
+@media screen and (max-width: 992px) {
+  .container {
+      max-width: 95%;
+  }
+}
