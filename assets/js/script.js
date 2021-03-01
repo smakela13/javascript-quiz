@@ -321,10 +321,17 @@ function endQuiz() {
     submit.innerHTML = "Submit";
     theQuestion.appendChild(submit);
 
+    var playAgain = document.createElement("button");
+    playAgain.setAttribute("type", "button");
+    playAgain.setAttribute("id", "again-button");
+    playAgain.innerHTML = "Play Again";
+    theQuestion.appendChild(playAgain);
+    playAgain.addEventListener("click", startQuiz);
+
     timerRun = false;
 
     submit.addEventListener("click", saveScore);
-    cleaningList.push(submit, enterInitials, quizEnd);
+    cleaningList.push(submit, enterInitials, quizEnd, playAgain);
 
 }
 
