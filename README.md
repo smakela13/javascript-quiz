@@ -15,13 +15,13 @@ This quiz is written in JavaScript, HTML, and CSS.
 
 ## Usage
 
-![Sarah Makela's Portfolio](./assets/images/javascript-quiz.png)
+![Soma Makela's JavaScript Quiz](./assets/images/javascript-quiz.png)
 
-Navigate to [Sarah Makela's Portfolio](https://smakela13.github.io/javascript-quiz/index.html) and view the web page.
+Navigate to [Soma Makela's JavaScript Quiz](https://smakela13.github.io/javascript-quiz/index.html) and view the web page.
 
 ## Credits
 
-Created by [Sarah Makela](https://github.com/smakela13).
+Created by [Soma Makela](https://github.com/smakela13).
 
 ## License
 
